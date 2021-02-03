@@ -11,10 +11,25 @@ struct Accumulate {
     product: i64,
 }
 
-#[allow(non_snake_case)]
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    let f = File::open(&args[1]).unwrap();
+fn task1(filename : &str) {
+    let f = File::open(filename).unwrap();
+    let br = BufReader::new(f);
+
+    let mut visited = HashSet::<i32>::new();
+
+    for line in br.lines() {
+        if let Ok(val) = line.unwrap().parse::<i32>() {
+            let complement = 2020 - val;
+            if visited.contains(&complement) {
+                println!("{:?}", complement*val);
+            }
+            visited.insert(val);
+        }
+    }
+}
+
+fn task2(filename : &str) {
+    let f = File::open(filename).unwrap();
     let br = BufReader::new(f);
 
     let mut visited = HashSet::<Accumulate>::new();
@@ -48,20 +63,12 @@ fn main() {
     println!("visited = {:?}", visited.len());
 }
 
-/*fn main() {
+
+
+
+fn main() {
     let args: Vec<String> = env::args().collect();
-    let f = File::open(&args[1]).unwrap();
-    let br = BufReader::new(f);
 
-    let mut visited = HashSet::<i32>::new();
-
-    for line in br.lines() {
-        if let Ok(val) = line.unwrap().parse::<i32>() {
-            let complement = 2020 - val;
-            if visited.contains(&complement) {
-                println!("{:?}", complement*val);
-            }
-            visited.insert(val);
-        }
-    }
-}*/
+    task1(&args[1]);
+    task2(&args[1]);
+}
